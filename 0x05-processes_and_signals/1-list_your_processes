@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# display all process a: user-oriented u, w/wo TTY (x), show heirachy (f)
+
+ps aux --forest
+ps auxf
+pstree
