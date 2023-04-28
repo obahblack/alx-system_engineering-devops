@@ -2,7 +2,7 @@
 # A bash script that displays Best School 10 times
 # Shellcheck style wants dummy _ variable if not using
 
-for i in {1..10}
+for _ in {1..10}
 do
 	echo "Best School"
 done
