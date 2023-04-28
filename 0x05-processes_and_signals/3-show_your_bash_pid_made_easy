@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# display bash PID
+
+pids=$(pgrep bash)
+
+for pid in $pids; do
+	ps -p "$pid" -o pid, comm --no-headeers
+done
