@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Script to list content in current dir after the dash "-" in the filename
+
+files="$(ls)"
+for f in $files;
+do
+	echo "$f" | cut -d "-" -f2
+done
