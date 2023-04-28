@@ -2,7 +2,7 @@
 # A bash script that displays Best school 10 times using while
 
 i=0
-while (( i < 10 ));
+while [ $i -le 10 ]
 do
      echo "Best School";
      (( i++ ));
