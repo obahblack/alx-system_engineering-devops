@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# script receives kill signal from another script running in another termial
+# kill signal is caught and ignored; printing msg instead
+
+msg()
+{
+	echo "I am invincible!!!"
+
+}
+trap "msg" SIGTERM
+
+while true
+do
+	echo "To infinity and beyond"
+	sleep 2
+done
