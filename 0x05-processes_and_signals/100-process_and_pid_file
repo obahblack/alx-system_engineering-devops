@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Infinite loop creates file with pid, catches signal, and removes file/exists
+
+function int_handler {
+	echo "Y U no love me?!"
+}
+
+rmfile_n_exit()
+{
+	# Delete PID file
+	rm -f /var/run/myscript.pid;
+	# Terminate script
+	exit
+}
+
+# Register signal handlers
+trap "echo 'I hate the kill command'; rmfile_n_exit" SIGTERM
+trap int_handler SIGINT
+trap "echo 'I hate the kill command'; rmfile_n_exit" SIGQUIT
+
+# Create PID file
+echo $$ >> /var/run/myscript.pid
+# Display message
+# Keep running indefinitely
+while true; do
+	echo "To infinity and beyond"
+	sleep 2
+done
