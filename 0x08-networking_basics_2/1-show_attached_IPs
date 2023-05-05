@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Using 'ip' command to display active IPs onthe machine
+# Filter out loopback and inactive IPs
+
+ip addr show | awk '/inet / {print $2}' | cut -d "/" -f 1 | grep -v 127.0.0.1 | grep -v 0.0.0.0
