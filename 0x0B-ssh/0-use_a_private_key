@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Specify the server and user
+server="54.209.178.243"
+user="ubuntu"
+
+# Specify the private key file
+private_key="~/.ssh/school"
+
+# SSH connection using single-character file
+ssh -i "$private_key" "$user"@"$server"
