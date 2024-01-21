@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
+# Bash script that uses ssh to connect to a server
+# Specify the server and user.. looks like this user@server IP
+# SSH connection
 
-# Specify the server and user
-server="54.209.178.243"
-user="ubuntu"
-
-# Specify the private key file
-private_key="~/.ssh/school"
-
-# SSH connection using single-character file
-ssh -i "$private_key" "$user"@"$server"
+ssh -i ~/.ssh/school ubuntu@54.160.103.40
