@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Install nginx on web server; Nginx should be listening on port 80
+# Querying Nginx at its root (/) with a GET request (requesting a page)
+
+# Install nginx
+sudo apt-get update
+sudo apt-get -y install nginx
+
+# Configure nginx to listen to post 80
+sudo sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
+
+# Restart nginx without using systemctl
+sudo /etc/init.d/nginx restart
+
+# Create a simple HTML file with "Hello World!"
+echo "<html><body>Hello World!</body></html>" | sudo tee/var/www/html/index.html > /dev/null
