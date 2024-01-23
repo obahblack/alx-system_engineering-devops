@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Fix curl error message by starting Apache server
+
+# Check the init system and start Apache accordingly
+if command -v systemctl &> /dev/null; then
+    sudo systemctl start apache2
+elif command -v service &> /dev/null; then
+    sudo service apache2 start
+elif command -v /etc/init.d/apache2 &> /dev/null; then
+    sudo /etc/init.d/apache2 start
+fi
