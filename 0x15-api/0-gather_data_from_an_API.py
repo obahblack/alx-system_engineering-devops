@@ -1,34 +1,38 @@
 #!/usr/bin/python3
 """
-Request from API; Return TODO list progress given employee ID
+gather employee data from API
 """
+
 import requests
-from sys import argv
+import sys
 
+REST_API = "https://jsonplaceholder.typicode.com"
 
-def display():
-    """return API data"""
-    users = requests.get("http://jsonplaceholder.typicode.com/users")
-    for u in users.json():
-        if u.get('id') == int(argv[1]):
-            EMPLOYEE_NAME = (u.get('name'))
-            break
-    TOTAL_NUM_OF_TASKS = 0
-    NUMBER_OF_DONE_TASKS = 0
-    TASK_TITLE = []
-    todos = requests.get("http://jsonplaceholder.typicode.com/todos")
-    for t in todos.json():
-        if t.get('userId') == int(argv[1]):
-            TOTAL_NUM_OF_TASKS += 1
-            if t.get('completed') is True:
-                    NUMBER_OF_DONE_TASKS += 1
-                    TASK_TITLE.append(t.get('title'))
-    print("Employee {} is done with tasks({}/{}):".format(EMPLOYEE_NAME,
-                                                          NUMBER_OF_DONE_TASKS,
-                                                          TOTAL_NUM_OF_TASKS))
-    for task in TASK_TITLE:
-        print("\t {}".format(task))
+if __name__ == '__main__':
+    if len(sys.argv) != 2 or not sys.argv[1].isdigit():
+        print("Usage: python3 gather_data_from_an_API.py <employee_id>")
+        sys.exit(1)
 
+    id = int(sys.argv[1])
+    user_url = '{}/users/{}'.format(REST_API, id)
+    todo_url = '{}/todos?userId={}'.format(REST_API, id)
 
-if __name__ == "__main__":
-    display()
+    user_req = requests.get(user_url)
+    if user_req.status_code != 200:
+        print("Error fetching user data.")
+        sys.exit(1)
+    user_data = user_req.json()
+    emp_name = user_data.get('name')
+
+    todo_req = requests.get(todo_url)
+    if todo_req.status_code != 200:
+        print("Error fetching TODO data.")
+        sys.exit(1)
+    todo_data = todo_req.json()
+    tasks = len(todo_data)
+    completed_tasks = sum(1 for task in todo_data if task.get('completed'))
+
+    print('Employee {} is done with tasks({}/{}):'.format(emp_name, completed_tasks, tasks))
+    for task in todo_data:
+        if task.get('completed'):
+            print('\t{}'.format(task.get('title')))
