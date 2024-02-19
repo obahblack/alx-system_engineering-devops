@@ -1,33 +1,40 @@
 #!/usr/bin/python3
 """
-Request from API; to export api to csv
+Request from API; Return TODO list progress given employee ID
+Export this data to CSV
 """
+
 import csv
 import requests
 from sys import argv
 
 def to_csv():
-    """return API data"""
+    """
+    Retrieve data from the API and export it to a CSV file.
+    """
+    # Retrieve user information
     users = requests.get("http://jsonplaceholder.typicode.com/users")
-    for u in users.json():
-        if u.get('id') == int(argv[1]):
-            USERNAME = (u.get('username'))
+    
+    # Find the username corresponding to the provided user ID
+    for user in users.json():
+        if user.get('id') == int(argv[1]):
+            username = user.get('username')
             break
-    TASK_STATUS_TITLE = []
+    
+    # Collect task completion status and title for the given user ID
+    task_status_title = []
     todos = requests.get("http://jsonplaceholder.typicode.com/todos")
-    for t in todos.json():
-        if t.get('userId') == int(argv[1]):
-            TASK_STATUS_TITLE.append((t.get('completed'), t.get('title')))
-
-    """export to csv"""
+    for todo in todos.json():
+        if todo.get('userId') == int(argv[1]):
+            task_status_title.append((todo.get('completed'), todo.get('title')))
+    
+    # Export data to CSV
     filename = "{}.csv".format(argv[1])
-    with open(filename, "w") as csvfile;
-        fieldnames = ["USER_ID", "USERNAME",
-                      "TASK_COMPLETED_STATUS", "TASK_TITLE"]
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames,
-                                quoting=csv.QUOTE_ALL)
-        for task in TASK_STATUS_TITLE:
-            writer.writerow({"USER_ID": argv[1], "USERNAME": USERNAME,
+    with open(filename, "w") as csvfile:
+        fieldnames = ["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
+        for task in task_status_title:
+            writer.writerow({"USER_ID": argv[1], "USERNAME": username,
                              "TASK_COMPLETED_STATUS": task[0],
                              "TASK_TITLE": task[1]})
 
