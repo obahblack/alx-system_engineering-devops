@@ -1,42 +1,34 @@
 #!/usr/bin/python3
 """
-gather employee data from API
+Request from API; Return TODO list progress given employee ID
 """
-
-import re
 import requests
-import sys
+from sys import argv
 
-REST_API = "https://jsonplaceholder.typicode.com"
 
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        if re.fullmatch(r'\d+', sys.argv[1]):
-            id = int(sys.argv[1])
-            req = requests.get('{}/users/{}'.format(REST_API, id)).json()
-            task_req = requests.get('{}/todos'.format(REST_API)).json()
-            emp_name = req.get('name')
-            tasks = list(filter(lambda x: x.get('userId') == id, task_req))
-            completed_tasks = list(filter(lambda x: x.get('completed'), tasks))
-            status = "OK" if len(completed_tasks) == 0 else "Incorrect"
-            print(
-                'First line formatting: {} ({} chars long)'.format(
-                    status,
-                    len(status)
-                )
-            )
-            status = "OK" if len(tasks) == 10 else "Incorrect"
-            print(
-                'To Do Count: {} ({} chars long)'.format(
-                    status,
-                    len(status)
-                )
-            )
-            for i in range(1, 13):
-                task = next((t for t in tasks if t['id'] == i), None)
-                status = "OK" if task else "Task {} not in output".format(i)
-                print('Task {} in output: {}{}'.format(i, status, "" if task else " ({} chars long)".format(len(status))))
-                if task:
-                    title = task['title']
-                    status = "OK" if len(title) <= 50 else "Incorrect"
-                    print('Task {} Formatting: {} ({} chars long)'.format(i, status, len(status)))
+def display():
+    """return API data"""
+    users = requests.get("http://jsonplaceholder.typicode.com/users")
+    for u in users.json():
+        if u.get('id') == int(argv[1]):
+            EMPLOYEE_NAME = (u.get('name'))
+            break
+    TOTAL_NUM_OF_TASKS = 0
+    NUMBER_OF_DONE_TASKS = 0
+    TASK_TITLE = []
+    todos = requests.get("http://jsonplaceholder.typicode.com/todos")
+    for t in todos.json():
+        if t.get('userId') == int(argv[1]):
+            TOTAL_NUM_OF_TASKS += 1
+            if t.get('completed') is True:
+                    NUMBER_OF_DONE_TASKS += 1
+                    TASK_TITLE.append(t.get('title'))
+    print("Employee {} is done with tasks({}/{}):".format(EMPLOYEE_NAME,
+                                                          NUMBER_OF_DONE_TASKS,
+                                                          TOTAL_NUM_OF_TASKS))
+    for task in TASK_TITLE:
+        print("\t {}".format(task))
+
+
+if __name__ == "__main__":
+    display()
