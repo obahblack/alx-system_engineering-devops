@@ -6,7 +6,6 @@ Python script that, using a given REST API, retrieves information about an emplo
 import sys
 import requests
 
-# Changed the docstring to clarify the purpose of the script.
 
 def get_todo_list(employee_id):
     """
@@ -43,10 +42,8 @@ def get_todo_list(employee_id):
         total_tasks = len(todo_data)
         completed_tasks = sum(1 for task in todo_data if task.get('completed'))
 
-        # Adjusted the print statement to include parentheses around the completed tasks count.
+        # Display employee's TODO list progress
         print(f"Employee {employee_name} is done with tasks ({completed_tasks}/{total_tasks}):")
-
-        # Changed the indentation of the print statement and added a colon to match the example output format.
         for task in todo_data:
             if task.get('completed'):
                 print(f"\t{task.get('title')}")
@@ -60,6 +57,6 @@ if __name__ == "__main__":
     if len(sys.argv) != 2 or not sys.argv[1].isdigit():
         print("Usage: python3 gather_data_from_an_API.py <employee_id>")
         sys.exit(1)
-
+    
     employee_id = int(sys.argv[1])
     get_todo_list(employee_id)
